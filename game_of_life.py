@@ -124,110 +124,59 @@ class Board(object):
 
 
     def draw_gridline(self, startp, endp):
-
         ''' Parameters: startp - a Point of where to start the gridline
-
                         endp - a Point of where to end the gridline
-
             Draws two straight 1 pixel lines next to each other, to create
-
             a nice looking grid on the canvas.
-
         '''
 
         line = Line(Point(startp.x*BLOCK_SIZE, startp.y*BLOCK_SIZE), \
-
                     Point(endp.x*BLOCK_SIZE, endp.y*BLOCK_SIZE))
-
         line.draw(self.canvas)
-
-        
 
         line = Line(Point(startp.x*BLOCK_SIZE-1, startp.y*BLOCK_SIZE-1), \
-
                     Point(endp.x*BLOCK_SIZE-1, endp.y*BLOCK_SIZE-1))
-
         line.draw(self.canvas)
 
-
-
     def random_seed(self, percentage):
-
         ''' Parameters: percentage - a number between 0 and 1 representing the
-
                                      percentage of the board to be filled with
-
                                      blocks
-
             This method activates the specified percentage of blocks randomly.
-
         '''
-
         for block in self.block_list.values():
-
             if random.random() < percentage:
-
                 block.set_live(self.canvas)
 
-
-
     def seed(self, block_coords):
-
         '''
-
         Seeds the board with a certain configuration.
-
         Takes in a list of (x, y) tuples representing block coordinates,
-
         and activates the blocks corresponding to those coordinates.
-
         '''
-
-        
 
         for coord in block_coords:
-
             if coord in self.block_list.keys():
-
                 self.block_list[coord].set_live(self.canvas)
 
-
-
     def get_block_neighbors(self, block):
-
         '''
-
         Given a Block object, returns a list of neighboring blocks.
-
         Should not return itself in the list.
-
         '''
-        
 
         neighbors = []
-
         coords = block.get_coords()
-
         y = -1
-
-        while y < 2:            
-
+        while y < 2:   
             for x in range(-1,2):
-
                 if 0 <= (coords[0] + x) <= BOARD_WIDTH - 1 and 0 <= (coords[1] + y) <= BOARD_HEIGHT - 1:
-
                     neighbors.append(self.block_list[coords[0] + x, coords[1] + y])
-
             y += 1
-
-        neighbors.remove(self.block_list[coords[0], coords[1]])           
-
+        neighbors.remove(self.block_list[coords[0], coords[1]])  
         return neighbors
 
-       
-
     def simulate(self):
-
         '''
         Executes one turn of Conways Game of Life 
         '''
