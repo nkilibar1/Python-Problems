@@ -2,178 +2,44 @@ from graphics import *
 
 import random
 
-
-
-## Written by Sarina Canelake & Kelly Casteel, August 2010
-
-## Revised January 2011
-
-
-
-############################################################
-
-# GLOBAL VARIABLES
-
-############################################################
-
     
 
 BLOCK_SIZE = 40
-
 BLOCK_OUTLINE_WIDTH = 2
-
 BOARD_WIDTH = 25
-
 BOARD_HEIGHT = 25
 
 
 
 neighbor_test_blocklist = [(0,0), (1,1)]
-
 toad_blocklist = [(4,4), (3,5), (3,6), (5,7), (6,5), (6,6)]
-
 beacon_blocklist = [(2,3), (2,4), (3,3), (3,4), (4,5), (4,6), (5,5), (5,6)]
-
 glider_blocklist = [(1,2), (2,3), (3,1), (3,2), (3,3)]
-
 pulsar_blocklist = [(2,4), (2,5), (2,6), (4,2), (4,7), (5,2), (5,7),
-
                     (6,2), (6,7), (7,4), (7,5), (7,6), ]
-
-# for diehard, make board at least 25x25, might need to change block size
-
 diehard_blocklist = [(5,7), (6,7), (6,8), (10,8), (11,8), (12,8), (11,6)]
 
 
 
-############################################################
-
-# TEST CODE (don't worry about understanding this section)
-
-############################################################
-
-
-
-def test_neighbors(board):
-
-    '''
-
-    Code to test the board.get_block_neighbor function
-
-    '''
-
-    for block in board.block_list.values():
-
-        neighbors = board.get_block_neighbors(block)
-
-        ncoords = [neighbor.get_coords() for neighbor in neighbors]
-
-        if block.get_coords() == (0,0):
-
-            zeroneighs = [(0,1), (1,1), (1,0)]
-
-            for n in ncoords:
-
-                if n not in zeroneighs:
-
-                    print "Testing block at (0,0)"
-
-                    print "Got", ncoords
-
-                    print "Expected", zeroneighs
-
-                    return False
-
-
-
-            for neighbor in neighbors:
-
-                if neighbor.get_coords() == (1, 1):
-
-                    if neighbor.is_live() == False:
-
-                        print "Testing block at (0, 0)..."
-
-                        print "My neighbor at (1, 1) should be live; it is not."
-
-                        print "Did you return my actual neighbors, or create new copies of them?"
-
-                        print "FAIL: get_block_neighbors() should NOT return new Blocks!"
-
-                        return False
-
-
-
-        elif block.get_coords() == (1,1):
-
-            oneneighs = [(0,0), (0,1), (0,2), (1,0), (1,2), (2,0), (2,1),(2,2)]
-
-            for n in ncoords:
-
-                if n not in oneneighs:
-
-                    print "Testing block at (1,1)"
-
-                    print "Got", ncoords
-
-                    print "Expected", oneneighs
-
-                    return False
-
-            for n in oneneighs:
-
-                if n not in ncoords:
-
-                    print "Testing block at (1,1)"
-
-                    print "Got", ncoords
-
-                    print "Expected", oneneighs
-
-                    return False
-
-    print "Passed neighbor test"
-
-    return True
-
-
-
-
-
-############################################################
-
-# BLOCK CLASS (Read through and understand this part!)
-
-############################################################
 
 
 
 class Block(Rectangle):
 
     ''' Block class:
-
         Implement a block for a tetris piece
-
         Attributes: x - type: int
-
                     y - type: int
-
         specify the position on the board
-
         in terms of the square grid
-
     '''
 
 
 
     def __init__(self, pos, color):
-
         '''
-
         pos: a Point object specifing the (x, y) square of the Block (NOT in pixels!)
-
         color: a string specifing the color of the block (eg 'blue' or 'purple')
-
         '''
 
         self.x = pos.x
@@ -277,21 +143,6 @@ class Block(Rectangle):
         
 
 
-
-###########################################################
-
-# BOARD CLASS (Read through and understand this part!)
-
-# Print out and turn in this section.
-
-# Name:
-
-# Recitation:
-
-###########################################################
-
-
-
 class Board(object):
 
     ''' Board class: it represents the Game of Life board
@@ -318,9 +169,7 @@ class Board(object):
 
         self.win = win
 
-        # self.delay is the number of ms between each simulation. Change to be
-
-        # shorter or longer if you wish!
+        # self.delay is the number of ms between each simulation.
 
         self.delay = 1000
 
@@ -347,7 +196,6 @@ class Board(object):
         for y in range(1,self.height):
 
             self.draw_gridline(Point(0, y), Point(self.width, y))
-
 
 
         # For each square on the board, a block is initialized
@@ -451,7 +299,6 @@ class Board(object):
         Should not return itself in the list.
 
         '''
-
         
 
         neighbors = []
@@ -506,25 +353,15 @@ class Board(object):
 
         for block in self.block_list.values():
 
-            
-
             neighbors = self.get_block_neighbors(block)
-
-            
 
             alive = 0
 
-            
-
             for neighbor in neighbors:
-
-                
 
                 if neighbor.is_live() == True:
 
                     alive += 1
-
-            #print alive        
 
             if alive < 2:
 
@@ -542,13 +379,7 @@ class Board(object):
 
                 block.new_status = 'dead'
 
-            #print block.new_status    
-
-                
-
         for block in self.block_list.values():
-
-            
 
             block.reset_status(self.canvas)
 
@@ -568,10 +399,7 @@ class Board(object):
 
         self.simulate()
 
-        self.win.after(1000, self.animate)
-
-
-
+        self.win.after(self.delay, self.animate)
 
 
 
@@ -594,51 +422,18 @@ if __name__ == '__main__':
 
 
 
-    ## PART 1: Make sure that the board __init__ method works    
-
-    #board.random_seed(.15)
-
-
-
-    ## PART 2: Make sure board.seed works. Comment random_seed above and uncomment
-
-    ##  one of the seed methods below
-
-    #board.seed(toad_blocklist)
-
-
-
-    ## PART 3: Test that neighbors work by commenting the above and uncommenting
-
-    ## the following two lines:
-
-    #board.seed(neighbor_test_blocklist)
-
-    #test_neighbors(board)
-
-
-
-
-
-    ## PART 4: Test that simulate() works by uncommenting the next two lines:
-
     board.seed(diehard_blocklist)
 
     
 
     
 
-    #win.after(10000, board.simulate)
-
-    ## PART 5: Try animating! Comment out win.after(2000, board.simulate) above, and
-
-    ## uncomment win.after below.
 
     win.after(2000, board.animate)
 
 
 
-    ## Yay, you're done! Try seeding with different blocklists (a few are provided at the top of this file!)
+
 
     
 
